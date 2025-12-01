@@ -6,6 +6,18 @@ const User = require('../models/User');
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_dev_key';
 const TOKEN_EXPIRES_IN = '8h';
 
+// Endpoint de prueba para verificar que la API está funcionando
+router.get('/test', (req, res) => {
+  res.json({ 
+    message: 'API de autenticación funcionando correctamente',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      register: 'POST /api/auth/register',
+      login: 'POST /api/auth/login'
+    }
+  });
+});
+
 router.post('/register', async (req, res) => {
   try {
     const { email, password } = req.body;

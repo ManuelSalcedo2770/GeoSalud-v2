@@ -48,6 +48,22 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+// Endpoint raíz para verificar que el servidor está funcionando
+app.get('/', (req, res) => {
+    res.json({
+        message: 'GeoSalud API está funcionando',
+        version: '2.0',
+        endpoints: {
+            auth: '/api/auth',
+            places: '/api/places',
+            zones: '/api/zones',
+            cases: '/api/cases',
+            resources: '/api/resources'
+        }
+    });
+});
+
 app.use('/api/auth', auth);
 app.use('/api/places', places);
 app.use('/api/zones', zones);
