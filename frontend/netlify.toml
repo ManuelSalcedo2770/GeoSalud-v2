@@ -1,0 +1,30 @@
+[build]
+  # Directorio donde se encuentra el código del frontend
+  base = "frontend"
+  
+  # Comando para construir la aplicación
+  command = "npm run build"
+  
+  # Directorio donde se genera la aplicación construida
+  publish = "dist"
+
+# Redirigir todas las rutas al index.html para React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Configuración de headers para seguridad y CORS
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "geolocation=(self)"
+
+# Configuración de headers para assets estáticos (cache)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
