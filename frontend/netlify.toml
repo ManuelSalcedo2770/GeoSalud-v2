@@ -8,6 +8,9 @@
   # Directorio donde se genera la aplicación construida
   publish = "dist"
 
+[build.environment]
+  NODE_VERSION = "18"
+
 # Redirigir todas las rutas al index.html para React Router
 [[redirects]]
   from = "/*"
