@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { MapPin, Eye, EyeOff, Loader2, UserPlus, AlertCircle, CheckCircle } from 'lucide-react';
 import './Register.css';
 
-const API_AUTH_URL = 'http://localhost:3000/api/auth';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_AUTH_URL = `${API_BASE_URL}/api/auth`;
 
 /**
  * Componente de Registro para la Plataforma de Gestión Epidemiológica GeoSalud
