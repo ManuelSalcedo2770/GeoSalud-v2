@@ -1,13 +1,13 @@
 //backend/routes/zones.js
 const express = require('express');
 const router = express.Router();
-const Zone = require('../models/Zone');
+const zoneService = require('../services/zoneService');
 const authenticateToken = require('../middleware/auth');
 
 // Obtener todas las zonas
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const zones = await Zone.find();
+    const zones = await zoneService.getAllZones();
     res.json(zones);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -16,16 +16,8 @@ router.get('/', authenticateToken, async (req, res) => {
 
 // Crear una zona
 router.post('/', authenticateToken, async (req, res) => {
-  const { name, description, coordinates } = req.body;
-
-  const zone = new Zone({
-    name,
-    description,
-    coordinates
-  });
-
   try {
-    const newZone = await zone.save();
+    const newZone = await zoneService.createZone(req.body);
     res.status(201).json(newZone);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -35,37 +27,22 @@ router.post('/', authenticateToken, async (req, res) => {
 // Actualizar zona
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
-    const { name, description, coordinates } = req.body;
-    const zone = await Zone.findById(req.params.id);
-    
-    if (!zone) {
-      return res.status(404).json({ message: 'Zona no encontrada' });
-    }
-
-    zone.name = name;
-    zone.description = description;
-    zone.coordinates = coordinates;
-
-    const updatedZone = await zone.save();
+    const updatedZone = await zoneService.updateZone(req.params.id, req.body);
     res.json(updatedZone);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    const statusCode = error.message.includes('no encontrada') ? 404 : 400;
+    res.status(statusCode).json({ message: error.message });
   }
 });
 
 // Borrar zona
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
-    const zone = await Zone.findById(req.params.id);
-    
-    if (!zone) {
-      return res.status(404).json({ message: 'Zona no encontrada' });
-    }
-
-    await zone.deleteOne();
-    res.json({ message: 'Zona eliminada correctamente' });
+    const result = await zoneService.deleteZone(req.params.id);
+    res.json(result);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    const statusCode = error.message.includes('no encontrada') ? 404 : 500;
+    res.status(statusCode).json({ message: error.message });
   }
 });
 
